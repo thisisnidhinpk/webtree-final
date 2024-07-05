@@ -48,10 +48,7 @@ class MyCatagoryController extends Controller
         return response()->json( $e->validator->errors());
     }
     
-    // Additional logic...
-
-   // return response()->json($userreg['profpic'], 201);
-    //return response()->json($stud, 201);
+  
 }
 public function loadCatagory(Request $request)
 {
@@ -92,10 +89,7 @@ public function loadCatagory(Request $request)
         return response()->json( $e->validator->errors());
     }
     
-    // Additional logic...
-
-   // return response()->json($userreg['profpic'], 201);
-    //return response()->json($stud, 201);
+    
 }
 
 public function updateCatagory(Request $request)
@@ -121,9 +115,7 @@ public function updateCatagory(Request $request)
             ->where('catagory', $validatedData['catagory'])
             ->update(['catagory' => $validatedData['changecatagory']]);
     
-        // $catagories = MyCatagories::where('customerid',$validatedData['customerid'])->where('catagory',$validatedData['catagory'])->get();
-        
-        // $catagories->update(['catagory' => $validatedData['changecatagory']]);
+      
        
         $catagories = MyCatagories::where('customerid',$validatedData['customerid'])->get();
         // return response()->json($catagories);
@@ -145,9 +137,6 @@ public function updateCatagory(Request $request)
         return response()->json( $e->validator->errors());
     }
     
-    // Additional logic...
-
-   // return response()->json($userreg['profpic'], 201);
-    //return response()->json($stud, 201);
+    
 }
 }

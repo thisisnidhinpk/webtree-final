@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 04, 2024 at 04:07 AM
+-- Generation Time: Jul 05, 2024 at 03:45 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -59,7 +59,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (23, '2019_08_19_000000_create_failed_jobs_table', 1),
 (24, '2019_12_14_000001_create_personal_access_tokens_table', 1),
 (25, '2024_06_28_141319_create_my_users_table', 1),
-(26, '2024_07_02_014011_create_my_catagories_table', 1);
+(26, '2024_07_02_014011_create_my_catagories_table', 1),
+(29, '2024_07_04_131941_create_my_expenses_table', 2);
 
 -- --------------------------------------------------------
 
@@ -78,10 +79,38 @@ CREATE TABLE `my_catagories` (
 --
 
 INSERT INTO `my_catagories` (`catagoryid`, `customerid`, `catagory`) VALUES
-(1, 1, 'office exp'),
+(1, 1, 'office exp1'),
 (2, 1, 'misc exp'),
-(3, 1, 'home exp'),
-(4, 1, 'misc exp');
+(3, 1, 'home exp');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `my_expenses`
+--
+
+CREATE TABLE `my_expenses` (
+  `expensesid` int(11) NOT NULL,
+  `customerid` int(11) NOT NULL,
+  `catagoryid` int(11) NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` int(11) NOT NULL,
+  `dateofexp` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `my_expenses`
+--
+
+INSERT INTO `my_expenses` (`expensesid`, `customerid`, `catagoryid`, `description`, `amount`, `dateofexp`) VALUES
+(3, 1, 1, 'table purchase', 2500, '2024-01-04'),
+(4, 1, 1, 'papper weight', 25, '2024-06-05'),
+(5, 1, 1, 'tea expenses', 350, '2024-07-01'),
+(6, 1, 1, 'vagitables', 350, '2024-06-30'),
+(7, 1, 3, 'vagitables', 350, '2024-06-29'),
+(8, 1, 3, 'bus fare', 450, '2024-06-28'),
+(9, 1, 3, 'vehicle', 1050, '2024-07-03'),
+(10, 1, 1, 'office tour', 10450, '2024-07-02');
 
 -- --------------------------------------------------------
 
@@ -176,6 +205,14 @@ ALTER TABLE `my_catagories`
   ADD KEY `my_catagories_customerid_foreign` (`customerid`);
 
 --
+-- Indexes for table `my_expenses`
+--
+ALTER TABLE `my_expenses`
+  ADD PRIMARY KEY (`expensesid`),
+  ADD KEY `my_expenses_customerid_foreign` (`customerid`),
+  ADD KEY `my_expenses_catagoryid_foreign` (`catagoryid`);
+
+--
 -- Indexes for table `my_users`
 --
 ALTER TABLE `my_users`
@@ -217,13 +254,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `my_catagories`
 --
 ALTER TABLE `my_catagories`
   MODIFY `catagoryid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `my_expenses`
+--
+ALTER TABLE `my_expenses`
+  MODIFY `expensesid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `my_users`
@@ -252,6 +295,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `my_catagories`
   ADD CONSTRAINT `my_catagories_customerid_foreign` FOREIGN KEY (`customerid`) REFERENCES `my_users` (`customerid`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `my_expenses`
+--
+ALTER TABLE `my_expenses`
+  ADD CONSTRAINT `my_expenses_catagoryid_foreign` FOREIGN KEY (`catagoryid`) REFERENCES `my_catagories` (`catagoryid`) ON DELETE CASCADE,
+  ADD CONSTRAINT `my_expenses_customerid_foreign` FOREIGN KEY (`customerid`) REFERENCES `my_users` (`customerid`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

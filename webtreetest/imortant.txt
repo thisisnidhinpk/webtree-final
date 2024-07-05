@@ -2,3 +2,4 @@ npm i react-redux @reduxjs/toolkit
 npm install react-router-dom@6
 
 npm install cors
+npm install axios

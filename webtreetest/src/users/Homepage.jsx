@@ -12,10 +12,12 @@ function Homepage() {
   return (
     <div>
       <h4>DashBoard</h4>
+
       <div className="row">
-        <div className="col-sm-3" style={{ backgroundColor: "aquamarine" }}>
-          {/* <p>Lorem ipsum...</p> */}
-        </div>
+        <div
+          className="col-sm-3"
+          style={{ backgroundColor: "aquamarine" }}
+        ></div>
         <div className="col-sm-6" style={{ backgroundColor: "aquamarine" }}>
           <div className="form-group">
             <input
@@ -49,8 +51,8 @@ function Homepage() {
           <div className="form-group">
             {/* <button className="btn btn-secondary" type="button"> */}
             <Link to={"/manageCatagory"}>Manage Catagory</Link>|
-            <Link to={"/"}>Manage Expences</Link>|
-            <Link to={"/"}>Expence Summary</Link>
+            <Link to={"/manageExpenses"}>Manage Expences</Link>|
+            <Link to={"/summerizeExpenses"}>Expence Summary</Link>
             <br></br>
             {/* <Link to={"/"}>SignOut</Link> */}
             <Logoutbtn></Logoutbtn>

@@ -4,13 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Logoutbtn from "./Logoutbtn";
 import axios from "axios";
-import CatagoryList from "./CatagoryList";
-function ManageCatagory() {
+function ManageExpenses() {
   const email = useSelector((state) => state.auth.UserEmail);
   const userfullname = useSelector((state) => state.auth.UserFullname);
   const [catagory, setCatagory] = useState();
   const [catagoryList, setCatagoryList] = useState([]);
-  const [catagoryList1, setCatagoryList1] = useState([]);
+  const [description, setDescription] = useState();
+  const [amount, setAmount] = useState();
+  const [dateofexp, setDateofexp] = useState();
+  const navigate = useNavigate();
 
   const headers = {
     "Content-Type": "application/json",
@@ -33,65 +35,43 @@ function ManageCatagory() {
         console.log(JSON.stringify(result.data));
 
         setCatagoryList(result.data);
+        // if (result.data.status == 200) {
+        //   alert(result.data.Msg);
+        // }
       })
       .catch((err) => console.log("jjj" + err));
     // });
   };
-  let updateCatagory = () => {
-    var x = document.getElementById("sel1").value;
-
-    setCatagory(x);
-
-    var changecatagory = prompt("Change catagory name");
-
-    if (changecatagory == null || changecatagory == "") {
-      return;
-    }
+  let createExpenses = () => {
+    
 
     axios
       .post(
-        "http://127.0.0.1:8000/api/updateCatagory",
+        "http://127.0.0.1:8000/api/createExpenses",
         {
           email,
           catagory,
-          changecatagory,
-        },
-        { headers }
-      )
-      .then((result) => {
-        setCatagoryList([]);
-        setCatagoryList(result.data);
-        if (result.data.status == 200) {
-          alert(result.data.Msg);
-        }
-      })
-      .catch((err) => console.log("jjj" + err));
-    //});
-  };
-  let createCatagory = () => {
-    axios
-      .post(
-        "http://127.0.0.1:8000/api/createCatagory",
-        {
-          email,
-          catagory,
+          description,
+          amount,
+          dateofexp,
         },
         { headers }
       )
       .then((result) => {
         console.log(result.data);
-        // if (result.data.status == 200) {
-        //   alert(result.data.Msg);
-        // }
+        if (result.data.status == 200) {
+          alert(result.data.Msg);
+        }
       })
       .catch((err) => console.log(err));
   };
   return (
     <div>
-      <h4>ManageCatagory</h4>
+      <h4>ManageExpenses</h4>
+
       <div className="row">
         <div className="col-sm-3" style={{ backgroundColor: "aquamarine" }}>
-          {/* <p>Lorem ipsum...</p> */}
+          
         </div>
         <div className="col-sm-6" style={{ backgroundColor: "aquamarine" }}>
           <div className="form-group">
@@ -104,26 +84,15 @@ function ManageCatagory() {
             />
           </div>
           <div className="form-group">
-            <input
-              type="text"
+            
+            <select
+              id="sel1"
               className="form-control"
-              placeholder="Catagory Name"
-              onChange={(mycatagory) => {
-                setCatagory(mycatagory.target.value);
+              onClick={loadCatagory}
+              onChange={(myval) => {
+                setCatagory(myval.target.value);
               }}
-            />
-          </div>
-          <div className="form-group">
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={createCatagory}
             >
-              <i className="fa fa-search"></i> Save
-            </button>
-          </div>
-          <div className="form-group">
-            <select id="sel1" className="form-control" onClick={loadCatagory}>
               {catagoryList.map((mycatagory, index) => (
                 <option key={index} value={mycatagory.catagory}>
                   {mycatagory.catagory}
@@ -132,23 +101,62 @@ function ManageCatagory() {
             </select>
           </div>
           <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Expense note"
+              onChange={(myexp) => {
+                setDescription(myexp.target.value);
+              }}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Amount"
+              onChange={(myamt) => {
+                setAmount(myamt.target.value);
+              }}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="date"
+              className="form-control"
+              onChange={(mydt) => {
+                setDateofexp(mydt.target.value);
+              }}
+            />
+          </div>
+          <div className="form-group">
             <button
               className="btn btn-secondary"
               type="button"
-              onClick={updateCatagory}
+              onClick={createExpenses}
+            >
+              <i className="fa fa-search"></i> Save
+            </button>
+          </div>
+        
+          <div className="form-group">
+            <button
+              className="btn btn-secondary"
+              type="button"
+             
             >
               <i className="fa fa-search"></i> Update Catagory
             </button>
           </div>
           <div className="form-group">
-            {/* <button className="btn btn-secondary" type="button"> */}
+           
             <Link to={"/manageCatagory"}>Manage Catagory</Link>|
             <Link to={"/manageExpenses"}>Manage Expences</Link>|
             <Link to={"/summerizeExpenses"}>Expence Summary</Link>
             <br></br>
-            {/* <Link to={"/"}>SignOut</Link> */}
+           
             <Logoutbtn></Logoutbtn>
-            {/* </button> */}
+           
           </div>
         </div>
         <div
@@ -160,4 +168,4 @@ function ManageCatagory() {
   );
 }
 
-export default ManageCatagory;
+export default ManageExpenses;

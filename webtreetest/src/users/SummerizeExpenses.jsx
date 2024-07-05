@@ -4,14 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Logoutbtn from "./Logoutbtn";
 import axios from "axios";
-import CatagoryList from "./CatagoryList";
-function ManageCatagory() {
+function SummerizeExpenses() {
   const email = useSelector((state) => state.auth.UserEmail);
   const userfullname = useSelector((state) => state.auth.UserFullname);
   const [catagory, setCatagory] = useState();
   const [catagoryList, setCatagoryList] = useState([]);
-  const [catagoryList1, setCatagoryList1] = useState([]);
-
+  const [expensessummery, setExpensessummery] = useState([]);
+  const [description, setDescription] = useState();
+  const [amount, setAmount] = useState();
+  const [dateofexpstart, setDateofexpstart] = useState();
+  const [dateofexpstop, setDateofexpstop] = useState();
+  const navigate = useNavigate();
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -19,8 +22,7 @@ function ManageCatagory() {
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
   };
   let loadCatagory = () => {
-    // alert("hjh");
-    //useEffect(() => {
+  
     axios
       .post(
         "http://127.0.0.1:8000/api/loadCatagory",
@@ -33,65 +35,41 @@ function ManageCatagory() {
         console.log(JSON.stringify(result.data));
 
         setCatagoryList(result.data);
-      })
-      .catch((err) => console.log("jjj" + err));
-    // });
-  };
-  let updateCatagory = () => {
-    var x = document.getElementById("sel1").value;
-
-    setCatagory(x);
-
-    var changecatagory = prompt("Change catagory name");
-
-    if (changecatagory == null || changecatagory == "") {
-      return;
-    }
-
-    axios
-      .post(
-        "http://127.0.0.1:8000/api/updateCatagory",
-        {
-          email,
-          catagory,
-          changecatagory,
-        },
-        { headers }
-      )
-      .then((result) => {
-        setCatagoryList([]);
-        setCatagoryList(result.data);
-        if (result.data.status == 200) {
-          alert(result.data.Msg);
-        }
-      })
-      .catch((err) => console.log("jjj" + err));
-    //});
-  };
-  let createCatagory = () => {
-    axios
-      .post(
-        "http://127.0.0.1:8000/api/createCatagory",
-        {
-          email,
-          catagory,
-        },
-        { headers }
-      )
-      .then((result) => {
-        console.log(result.data);
         // if (result.data.status == 200) {
         //   alert(result.data.Msg);
         // }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("jjj" + err));
+    // });
+  };
+  let summerizeExpense = () => {
+   
+    axios
+      .post(
+        "http://127.0.0.1:8000/api/summerizeExpenses",
+        {
+          email,
+          dateofexpstart,
+          dateofexpstop,
+        },
+        { headers }
+      )
+      .then((result) => {
+        console.log(JSON.stringify(result.data));
+
+        setExpensessummery(result.data);
+      
+      })
+      .catch((err) => console.log("jjj" + err));
+    
   };
   return (
     <div>
-      <h4>ManageCatagory</h4>
+      <h4>SummerizeExpenses</h4>
+
       <div className="row">
         <div className="col-sm-3" style={{ backgroundColor: "aquamarine" }}>
-          {/* <p>Lorem ipsum...</p> */}
+         
         </div>
         <div className="col-sm-6" style={{ backgroundColor: "aquamarine" }}>
           <div className="form-group">
@@ -105,25 +83,31 @@ function ManageCatagory() {
           </div>
           <div className="form-group">
             <input
-              type="text"
+              type="date"
               className="form-control"
-              placeholder="Catagory Name"
-              onChange={(mycatagory) => {
-                setCatagory(mycatagory.target.value);
+              onChange={(mydtstart) => {
+                setDateofexpstart(mydtstart.target.value);
               }}
             />
           </div>
           <div className="form-group">
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={createCatagory}
-            >
-              <i className="fa fa-search"></i> Save
-            </button>
+            <input
+              type="date"
+              className="form-control"
+              onChange={(mydtstop) => {
+                setDateofexpstop(mydtstop.target.value);
+              }}
+            />
           </div>
           <div className="form-group">
-            <select id="sel1" className="form-control" onClick={loadCatagory}>
+            <select
+              id="sel1"
+              className="form-control"
+              onClick={loadCatagory}
+              onChange={(myval) => {
+                setCatagory(myval.target.value);
+              }}
+            >
               {catagoryList.map((mycatagory, index) => (
                 <option key={index} value={mycatagory.catagory}>
                   {mycatagory.catagory}
@@ -131,24 +115,46 @@ function ManageCatagory() {
               ))}
             </select>
           </div>
+
           <div className="form-group">
             <button
               className="btn btn-secondary"
               type="button"
-              onClick={updateCatagory}
+              onClick={summerizeExpense}
             >
+              <i className="fa fa-search"></i> view
+            </button>
+          </div>
+          <div className="form-group">
+            <table>
+              <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Date</th>
+              </tr>
+              {expensessummery.map((expensessummeries, index) => (
+                <tr key={index}>
+                  <td>{expensessummeries.description}</td>
+
+                  <td>{expensessummeries.amount}</td>
+                  <td>{expensessummeries.dateofexp}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+
+          <div className="form-group">
+            <button className="btn btn-secondary" type="button">
               <i className="fa fa-search"></i> Update Catagory
             </button>
           </div>
           <div className="form-group">
-            {/* <button className="btn btn-secondary" type="button"> */}
             <Link to={"/manageCatagory"}>Manage Catagory</Link>|
             <Link to={"/manageExpenses"}>Manage Expences</Link>|
             <Link to={"/summerizeExpenses"}>Expence Summary</Link>
             <br></br>
-            {/* <Link to={"/"}>SignOut</Link> */}
             <Logoutbtn></Logoutbtn>
-            {/* </button> */}
+            
           </div>
         </div>
         <div
@@ -160,4 +166,4 @@ function ManageCatagory() {
   );
 }
 
-export default ManageCatagory;
+export default SummerizeExpenses;

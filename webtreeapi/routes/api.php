@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MyCatagoryController;
+use App\Http\Controllers\MyExpensesController;
 use App\Http\Controllers\MyUsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +25,6 @@ Route::post('/login', [MyUsersController::class, 'login']);
 Route::post('/createCatagory', [MyCatagoryController::class, 'createCatagory']);
 Route::post('/loadCatagory', [MyCatagoryController::class, 'loadCatagory']);
 Route::post('/updateCatagory', [MyCatagoryController::class, 'updateCatagory']);
+Route::post('/createExpenses', [MyExpensesController::class, 'createExpenses']);
+Route::post('/summerizeExpenses', [MyExpensesController::class, 'summerizeExpenses']);
  
